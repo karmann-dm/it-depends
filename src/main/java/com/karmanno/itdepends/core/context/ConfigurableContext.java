@@ -1,4 +1,7 @@
-package com.karmanno.itdepends.core;
+package com.karmanno.itdepends.core.context;
+
+import com.karmanno.itdepends.core.ConfigurationBuilder;
+import com.karmanno.itdepends.core.component.ContextComponent;
 
 import java.util.Optional;
 import java.util.stream.Stream;

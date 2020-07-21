@@ -1,4 +1,6 @@
-package com.karmanno.itdepends.core;
+package com.karmanno.itdepends.core.component;
+
+import com.karmanno.itdepends.core.Scope;
 
 import java.util.ArrayList;
 import java.util.List;

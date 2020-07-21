@@ -1,4 +1,4 @@
-package com.karmanno.itdepends.core;
+package com.karmanno.itdepends.core.property;
 
 import java.io.IOException;
 import java.net.URI;

@@ -1,5 +1,8 @@
 package com.karmanno.itdepends.core;
 
+import com.karmanno.itdepends.core.component.ContextComponent;
+import com.karmanno.itdepends.core.component.DefaultContextComponentBuilder;
+import com.karmanno.itdepends.core.component.DefaultContextComponentFactory;
 import org.junit.Assert;
 import org.junit.Test;
 

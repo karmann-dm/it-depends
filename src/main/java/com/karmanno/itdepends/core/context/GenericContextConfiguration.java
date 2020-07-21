@@ -1,4 +1,8 @@
-package com.karmanno.itdepends.core;
+package com.karmanno.itdepends.core.context;
+
+import com.karmanno.itdepends.core.component.ContextComponent;
+import com.karmanno.itdepends.core.context.ContextConfiguration;
+import com.karmanno.itdepends.core.property.PropertySource;
 
 import java.util.Collection;
 import java.util.Map;
@@ -7,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GenericContextConfiguration implements ContextConfiguration {
     Map<String, PropertySource> propertySourceMap = new ConcurrentHashMap<>();
     Map<String, ContextComponent<?>> components = new ConcurrentHashMap<>();
+    Map<String, Object> instances = new ConcurrentHashMap<>();
 
     // TODO: resolve conflicts
     @Override

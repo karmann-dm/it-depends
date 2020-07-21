@@ -1,4 +1,8 @@
-package com.karmanno.itdepends.core;
+package com.karmanno.itdepends.core.component;
+
+import com.karmanno.itdepends.core.Scope;
+import com.karmanno.itdepends.core.component.ContextComponent;
+import com.karmanno.itdepends.core.component.ContextComponentFactory;
 
 public class DefaultContextComponent<T> implements ContextComponent<T> {
     private final ContextComponentFactory<T> contextComponentFactory;

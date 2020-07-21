@@ -10,8 +10,6 @@ public class GenericConfigurableContextTest {
                 new GenericConfigurationBuilder()
                     .propertySource(new PropertySource("properties1.properties"))
                     .propertySource(new PropertySource("properties2.properties"))
-                    .module("module1")
-                    .module("module2", new GenericModuleBuilder())
         );
     }
 }

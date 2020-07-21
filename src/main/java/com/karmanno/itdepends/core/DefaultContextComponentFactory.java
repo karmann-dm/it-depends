@@ -2,28 +2,23 @@ package com.karmanno.itdepends.core;
 
 import java.lang.reflect.Constructor;
 
-public class DefaultContextComponentFactory implements ContextComponentFactory<Object> {
-    private final Object[] arguments;
+public class DefaultContextComponentFactory<T> implements ContextComponentFactory<T> {
     private final Class<?>[] argumentClasses;
-    private final Class<?> componentClass;
+    private final Class<T> componentClass;
 
-    public DefaultContextComponentFactory(Class<?> componentClass, Object... arguments) {
-        this.arguments = arguments;
+    public DefaultContextComponentFactory(Class<T> componentClass, Class<?>... argumentClasses) {
         this.componentClass = componentClass;
-        argumentClasses = new Class<?>[arguments.length];
-        for (int i = 0; i < argumentClasses.length; i++) {
-            argumentClasses[i] = arguments[i].getClass();
-        }
+        this.argumentClasses = argumentClasses;
     }
 
     @Override
-    public Object create() {
+    public T create(Object... arguments) {
         try {
-            Constructor<?> componentConstructor = componentClass.getDeclaredConstructor(argumentClasses);
+            Constructor<T> componentConstructor = componentClass.getConstructor(argumentClasses);
             componentConstructor.setAccessible(true);
             return componentConstructor.newInstance(arguments);
         } catch (Exception e) {
-            throw new RuntimeException("Could not instantiate component");
+            throw new RuntimeException("Could not instantiate component", e);
         }
     }
 }

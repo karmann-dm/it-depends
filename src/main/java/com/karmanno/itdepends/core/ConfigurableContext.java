@@ -7,13 +7,10 @@ public interface ConfigurableContext {
     ContextConfiguration getConfiguration();
     ContextConfiguration configure(ConfigurationBuilder builder);
 
-    Optional<ContextModule> register(ContextModule module);
 
-    Optional<ContextComponent> getComponentById(String id);
-    Optional<ContextComponent> getComponentById(String id, String moduleId);
+    Optional<ContextComponent<?>> getComponentById(String id);
 
-    Optional<ContextComponent> getComponentByClass(Class<?> cls);
-    Optional<ContextComponent> getComponentByClass(Class<?> cls, String moduleId);
+    <T> Optional<ContextComponent<?>> getComponentByClass(Class<T> cls);
 
-    Stream<ContextComponent> getComponentsByClass(Class<?> cls);
+    <T> Stream<ContextComponent<T>> getComponentsByClass(Class<T> cls);
 }

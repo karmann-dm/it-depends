@@ -4,43 +4,34 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class GenericConfigurableContext implements ConfigurableContext {
+    private final GenericContextConfiguration contextConfiguration = new GenericContextConfiguration();
+
     @Override
     public ContextConfiguration getConfiguration() {
-        return null;
+        return contextConfiguration;
     }
 
     @Override
     public ContextConfiguration configure(ConfigurationBuilder builder) {
-        return null;
+        return builder.build();
     }
 
     @Override
-    public Optional<ContextModule> register(ContextModule module) {
-        return Optional.empty();
+    public Optional<ContextComponent<?>> getComponentById(String id) {
+        return Optional.ofNullable(contextConfiguration.getComponents().get(id));
     }
 
     @Override
-    public Optional<ContextComponent> getComponentById(String id) {
-        return Optional.empty();
+    public <T> Optional<ContextComponent<?>> getComponentByClass(Class<T> cls) {
+        return contextConfiguration.getComponents()
+                .values()
+                .stream()
+                .filter(contextComponent -> contextComponent.componentClass().equals(cls))
+                .findFirst();
     }
 
     @Override
-    public Optional<ContextComponent> getComponentById(String id, String moduleId) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<ContextComponent> getComponentByClass(Class<?> cls) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<ContextComponent> getComponentByClass(Class<?> cls, String moduleId) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Stream<ContextComponent> getComponentsByClass(Class<?> cls) {
+    public <T> Stream<ContextComponent<T>> getComponentsByClass(Class<T> cls) {
         return null;
     }
 }

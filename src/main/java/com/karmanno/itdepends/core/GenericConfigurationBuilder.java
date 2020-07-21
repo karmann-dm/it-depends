@@ -10,15 +10,9 @@ public class GenericConfigurationBuilder implements ConfigurationBuilder {
     }
 
     @Override
-    public ConfigurationBuilder module(String id) {
-        contextConfiguration.registerModule(id)
-                .orElseThrow(() -> new RuntimeException("Could not register module"));
+    public ConfigurationBuilder component(ContextComponentBuilder<?> componentBuilder) {
+        contextConfiguration.registerComponent(componentBuilder.build());
         return this;
-    }
-
-    @Override
-    public ConfigurationBuilder module(String id, GenericModuleBuilder genericModuleBuilder) {
-        return null;
     }
 
     @Override

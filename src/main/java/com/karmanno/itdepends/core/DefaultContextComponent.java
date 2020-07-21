@@ -1,21 +1,30 @@
 package com.karmanno.itdepends.core;
 
-public class DefaultContextComponent implements ContextComponent {
-    private final ContextComponentFactory<?> contextComponentFactory;
-    private final Class<?> componentClass;
+public class DefaultContextComponent<T> implements ContextComponent<T> {
+    private final ContextComponentFactory<T> contextComponentFactory;
+    private final Class<T> componentClass;
+    private final Scope scope;
 
-    public DefaultContextComponent(Class<?> componentClass, Object... arguments) {
+    DefaultContextComponent(Class<T> componentClass,
+                            Scope scope,
+                            ContextComponentFactory<T> factory) {
         this.componentClass = componentClass;
-        this.contextComponentFactory = new DefaultContextComponentFactory(componentClass, arguments);
+        this.scope = scope;
+        this.contextComponentFactory = factory;
     }
 
     @Override
-    public Class<?> componentClass() {
+    public Class<T> componentClass() {
         return componentClass;
     }
 
     @Override
-    public ContextComponentFactory<?> componentFactory() {
+    public ContextComponentFactory<T> componentFactory() {
         return contextComponentFactory;
+    }
+
+    @Override
+    public Scope scope() {
+        return scope;
     }
 }

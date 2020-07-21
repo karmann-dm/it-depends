@@ -1,5 +1,5 @@
 package com.karmanno.itdepends.core;
 
 public interface ContextComponentFactory<T> {
-    T create();
+    T create(Object... arguments);
 }

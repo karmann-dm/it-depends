@@ -1,6 +1,5 @@
 package com.karmanno.itdepends.core.component;
 
-import com.karmanno.itdepends.core.component.ContextComponentFactory;
 import com.karmanno.itdepends.core.exception.ComponentFactoryException;
 
 import java.lang.reflect.Constructor;
@@ -27,7 +26,7 @@ public class DefaultContextComponentFactory<T> implements ContextComponentFactor
         }
     }
 
-    private void checkTypeMismatch(Object[] arguments) {
+    void checkTypeMismatch(Object... arguments) {
         if (arguments == null)
             throw new ComponentFactoryException("Arguments array is null");
         if (arguments.length != argumentClasses.length)
@@ -37,9 +36,18 @@ public class DefaultContextComponentFactory<T> implements ContextComponentFactor
             Class<?> actualArgType = arguments[argIndex] == null ? Object.class : arguments[argIndex].getClass();
             if (!requiredArgType.isAssignableFrom(actualArgType)) {
                 throw new ComponentFactoryException("Type mismatch on arg position " + argIndex + " class " +
-                            actualArgType.toString() + " is not compatible with required type " + requiredArgType.toString()
+                            actualArgType.toString() + " is not compatible with required type " + requiredArgType.toString() +
+                            " provided by constructor"
                         );
             }
         }
+    }
+
+    public Class<?>[] getArgumentClasses() {
+        return argumentClasses;
+    }
+
+    public Class<T> getComponentClass() {
+        return componentClass;
     }
 }

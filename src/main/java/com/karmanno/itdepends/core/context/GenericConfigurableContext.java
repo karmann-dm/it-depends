@@ -38,4 +38,9 @@ public class GenericConfigurableContext implements ConfigurableContext {
     public <T> Stream<ContextComponent<T>> getComponentsByClass(Class<T> cls) {
         return null;
     }
+
+    @Override
+    public void resolve() {
+
+    }
 }

@@ -20,12 +20,12 @@ public class DefaultContextComponentBuilder<T> implements ContextComponentBuilde
         return this;
     }
 
-    public ContextComponentBuilder<T> factory(ContextComponentFactory<T> contextComponentFactory) {
+    public DefaultContextComponentBuilder<T> factory(ContextComponentFactory<T> contextComponentFactory) {
         this.contextComponentFactory = contextComponentFactory;
         return this;
     }
 
-    public ContextComponentBuilder<T> scope(Scope scope) {
+    public DefaultContextComponentBuilder<T> scope(Scope scope) {
         this.scope = scope;
         return this;
     }

@@ -1,8 +1,6 @@
 package com.karmanno.itdepends.core.component;
 
 import com.karmanno.itdepends.core.Scope;
-import com.karmanno.itdepends.core.component.ContextComponent;
-import com.karmanno.itdepends.core.component.ContextComponentFactory;
 
 public class DefaultContextComponent<T> implements ContextComponent<T> {
     private final ContextComponentFactory<T> contextComponentFactory;
@@ -12,6 +10,10 @@ public class DefaultContextComponent<T> implements ContextComponent<T> {
     DefaultContextComponent(Class<T> componentClass,
                             Scope scope,
                             ContextComponentFactory<T> factory) {
+        assert componentClass != null;
+        assert scope != null;
+        assert factory != null;
+
         this.componentClass = componentClass;
         this.scope = scope;
         this.contextComponentFactory = factory;

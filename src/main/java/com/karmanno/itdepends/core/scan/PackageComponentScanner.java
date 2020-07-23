@@ -2,11 +2,14 @@ package com.karmanno.itdepends.core.scan;
 
 import com.karmanno.itdepends.core.component.ContextComponent;
 import com.karmanno.itdepends.core.component.DefaultContextComponentBuilder;
+import com.karmanno.itdepends.core.exception.ComponentScanException;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PackageComponentScanner implements ComponentScanner {
     private final String basePackage;
@@ -22,16 +25,37 @@ public class PackageComponentScanner implements ComponentScanner {
             Class<?>[] classes = getClasses(basePackage);
             for (Class<?> cls : classes) {
                 var component = new DefaultContextComponentBuilder(cls);
-                var constructor = Arrays.stream(cls.getConstructors())
-                        .filter(c -> c.isAnnotationPresent(ContextTarget.class))
-                        .findFirst()
-                        .orElseGet(() ->
-                                Arrays.stream(cls.getConstructors())
-                                        .findFirst()
-                                        .orElseThrow(() ->
-                                                new RuntimeException("Couldn't find an appropriate constructor")
-                                        )
-                        );
+                var constructors = Arrays.asList(cls.getConstructors());
+                Constructor<?> constructor = null;
+
+                if (constructors.size() == 1) {
+                    constructor = constructors.get(0);
+                } else {
+                    var annotatedConstructors = constructors.stream()
+                            .filter(c -> c.isAnnotationPresent(ContextTarget.class))
+                            .collect(Collectors.toList());
+                    if (annotatedConstructors.size() == 0) {
+                        var nonEmptyConstructors = constructors.stream()
+                                .filter(c -> c.getParameterCount() > 0)
+                                .collect(Collectors.toList());
+                        if (nonEmptyConstructors.size() == 1) {
+                            constructor = nonEmptyConstructors.get(0);
+                        } else if (nonEmptyConstructors.size() > 1) {
+                            throw new ComponentScanException("Impossible to choose constructor for injection. There is more than 1 non-empty constructor");
+                        } else {
+                            constructor = constructors
+                                    .stream()
+                                    .filter(c -> c.getParameterCount() == 0)
+                                    .findFirst()
+                                    .orElseThrow(() -> new ComponentScanException("No constructors present"));
+                        }
+                    } else if (annotatedConstructors.size() > 1) {
+                        throw new ComponentScanException("Impossible to choose constructor for injection. There is more than 1 constructor with ContextTarget annotation");
+                    } else {
+                        constructor = annotatedConstructors.get(0);
+                    }
+                }
+
                 var types = constructor.getParameterTypes();
                 for (Class<?> type : types) {
                     component.arg(type);
@@ -39,7 +63,7 @@ public class PackageComponentScanner implements ComponentScanner {
                 result.add(component.build());
             }
         } catch (Exception e) {
-            return Collections.emptyList();
+            throw new ComponentScanException("Could not scan package " + basePackage, e);
         }
         return result;
     }

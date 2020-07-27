@@ -1,10 +1,12 @@
 package com.karmanno.itdepends.core.examples.annotated_examples;
 
+import com.karmanno.itdepends.core.scan.ContextScoped;
 import com.karmanno.itdepends.core.scan.ContextTarget;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+@ContextScoped
 public class SomeClass {
     @ContextTarget
     public SomeClass(BigDecimal bigDecimal, BigInteger bigInteger) {

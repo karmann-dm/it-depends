@@ -10,6 +10,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ContextScoped {
-    Scope scope();
-    String module() default "main";
+    Scope scope() default Scope.SINGLETON;
 }

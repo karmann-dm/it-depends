@@ -1,4 +1,4 @@
-package com.karmanno.itdepends.core.examples;
+package com.karmanno.itdepends.core.examples.multiple_correct_examples;
 
 import java.math.BigDecimal;
 

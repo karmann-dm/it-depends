@@ -1,6 +1,5 @@
 package com.karmanno.itdepends.core.component;
 
-import com.karmanno.itdepends.core.Scope;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -17,6 +16,7 @@ public class DefaultContextComponentBuilderTest {
                 .arg(BigInteger.class)
                 .arg(MathContext.class)
                 .scope(Scope.PROTOTYPE)
+                .instantiationPolicy(InstantiationPolicy.LAZY)
                 .factory(new DefaultContextComponentFactory<>(BigDecimal.class, BigInteger.class, MathContext.class))
                 .build();
 
@@ -28,6 +28,7 @@ public class DefaultContextComponentBuilderTest {
         assertEquals(MathContext.class, ((DefaultContextComponentFactory<?>)component.componentFactory()).getArgumentClasses()[1]);
         assertEquals(BigDecimal.class, ((DefaultContextComponentFactory<?>)component.componentFactory()).getComponentClass());
         assertEquals(Scope.PROTOTYPE, component.scope());
+        assertEquals(InstantiationPolicy.LAZY, component.instantiationPolicy());
     }
 
     @Test
@@ -53,6 +54,18 @@ public class DefaultContextComponentBuilderTest {
 
         // then:
         assertEquals(DefaultContextComponentFactory.class, component.componentFactory().getClass());
+    }
+
+    @Test
+    public void shouldSubstituteInstantiationPolicyByDefault() {
+        // when:
+        var component = new DefaultContextComponentBuilder<>(BigDecimal.class)
+                .arg(BigInteger.class)
+                .arg(MathContext.class)
+                .build();
+
+        // then:
+        assertEquals(InstantiationPolicy.INSTANT, component.instantiationPolicy());
     }
 
     @Test(expected = AssertionError.class)

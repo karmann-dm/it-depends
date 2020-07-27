@@ -1,5 +1,6 @@
 package com.karmanno.itdepends.core.context;
 
+import com.karmanno.itdepends.core.component.ComponentInstance;
 import com.karmanno.itdepends.core.component.ContextComponent;
 import com.karmanno.itdepends.core.property.PropertySource;
 
@@ -14,4 +15,6 @@ public interface ContextConfiguration {
     void registerPropertySource(PropertySource propertySource);
 
     Map<String, ContextComponent<?>> getComponents();
+
+    Map<String, ComponentInstance<?>> getInstances();
 }

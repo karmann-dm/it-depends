@@ -1,6 +1,5 @@
 package com.karmanno.itdepends.core.component;
 
-import com.karmanno.itdepends.core.Scope;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -14,7 +13,8 @@ public class DefaultContextComponentTest {
         ContextComponent<BigDecimal> contextComponent = new DefaultContextComponent<>(
                 BigDecimal.class,
                 Scope.PROTOTYPE,
-                new DefaultContextComponentFactory<>(BigDecimal.class)
+                new DefaultContextComponentFactory<>(BigDecimal.class),
+                InstantiationPolicy.INSTANT
         );
 
         // then
@@ -27,6 +27,7 @@ public class DefaultContextComponentTest {
     public void shouldFailOnNullFields() {
         // when
         ContextComponent<Void> contextComponent = new DefaultContextComponent<>(
+                null,
                 null,
                 null,
                 null

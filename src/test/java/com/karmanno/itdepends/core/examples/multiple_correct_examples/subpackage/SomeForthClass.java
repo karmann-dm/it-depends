@@ -1,4 +1,4 @@
-package com.karmanno.itdepends.core.examples.subpackage;
+package com.karmanno.itdepends.core.examples.multiple_correct_examples.subpackage;
 
 import java.util.zip.GZIPInputStream;
 

@@ -1,4 +1,4 @@
-package com.karmanno.itdepends.core.plain_examples;
+package com.karmanno.itdepends.core.examples.plain_examples;
 
 import java.io.InputStream;
 import java.math.BigDecimal;

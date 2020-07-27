@@ -1,6 +1,6 @@
 package com.karmanno.itdepends.core.scan;
 
-import com.karmanno.itdepends.core.Scope;
+import com.karmanno.itdepends.core.component.Scope;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

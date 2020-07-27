@@ -1,7 +1,6 @@
-package com.karmanno.itdepends.core;
+package com.karmanno.itdepends.core.context;
 
 import com.karmanno.itdepends.core.component.ContextComponentBuilder;
-import com.karmanno.itdepends.core.context.ContextConfiguration;
 import com.karmanno.itdepends.core.property.PropertySource;
 
 public interface ConfigurationBuilder {

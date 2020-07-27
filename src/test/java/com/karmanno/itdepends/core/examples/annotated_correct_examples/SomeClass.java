@@ -1,4 +1,4 @@
-package com.karmanno.itdepends.core.annotated_correct_examples;
+package com.karmanno.itdepends.core.examples.annotated_correct_examples;
 
 import com.karmanno.itdepends.core.scan.ContextTarget;
 

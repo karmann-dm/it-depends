@@ -1,6 +1,6 @@
 package com.karmanno.itdepends.core.scan;
 
-import com.karmanno.itdepends.core.annotated_correct_examples.SomeClass;
+import com.karmanno.itdepends.core.examples.annotated_correct_examples.SomeClass;
 import com.karmanno.itdepends.core.component.ContextComponent;
 import com.karmanno.itdepends.core.component.DefaultContextComponentFactory;
 import com.karmanno.itdepends.core.examples.multiple_correct_examples.SomeFirstClass;
@@ -21,7 +21,7 @@ public class PackageComponentScannerTest {
     @Test
     public void shouldScanPlainComponentsFromExamplePackage() {
         // given:
-        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.examples");
+        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.examples.multiple_correct_examples");
 
         // when:
         var components = packageComponentScanner.scanForComponents();
@@ -37,7 +37,7 @@ public class PackageComponentScannerTest {
     @Test
     public void shouldScanAnnotatedComponentsFromExamplePackage() {
         // given:
-        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.annotated_correct_examples");
+        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.examples.annotated_correct_examples");
 
         // when:
         var components = packageComponentScanner.scanForComponents();
@@ -55,7 +55,7 @@ public class PackageComponentScannerTest {
     @Test(expected = ComponentScanException.class)
     public void shouldFailOnMultipleNotEmptyConstructor() {
         // given:
-        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.plain_examples");
+        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.examples.plain_examples");
 
         // when:
         packageComponentScanner.scanForComponents();
@@ -64,7 +64,7 @@ public class PackageComponentScannerTest {
     @Test(expected = ComponentScanException.class)
     public void shouldFailOnMultipleAnnotatedConstructor() {
         // given:
-        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.annotated_examples");
+        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.examples.annotated_examples");
 
         // when:
         packageComponentScanner.scanForComponents();

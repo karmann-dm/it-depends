@@ -1,7 +1,5 @@
 package com.karmanno.itdepends.core.component;
 
-import com.karmanno.itdepends.core.Scope;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +8,7 @@ public class DefaultContextComponentBuilder<T> implements ContextComponentBuilde
     private final List<Class<?>> argumentClasses = new ArrayList<>();
     private Scope scope;
     private ContextComponentFactory<T> contextComponentFactory;
+    private InstantiationPolicy instantiationPolicy;
 
     public DefaultContextComponentBuilder(Class<T> componentClass) {
         this.componentClass = componentClass;
@@ -30,6 +29,11 @@ public class DefaultContextComponentBuilder<T> implements ContextComponentBuilde
         return this;
     }
 
+    public DefaultContextComponentBuilder<T> instantiationPolicy(InstantiationPolicy instantiationPolicy) {
+        this.instantiationPolicy = instantiationPolicy;
+        return this;
+    }
+
     @Override
     public DefaultContextComponent<T> build() {
         return new DefaultContextComponent<>(
@@ -37,7 +41,8 @@ public class DefaultContextComponentBuilder<T> implements ContextComponentBuilde
                 scope == null ? Scope.SINGLETON : scope,
                 contextComponentFactory == null
                         ? new DefaultContextComponentFactory<>(componentClass, argumentClasses.toArray(new Class<?>[0]))
-                        : contextComponentFactory
+                        : contextComponentFactory,
+                instantiationPolicy == null ? InstantiationPolicy.INSTANT : instantiationPolicy
         );
     }
 }

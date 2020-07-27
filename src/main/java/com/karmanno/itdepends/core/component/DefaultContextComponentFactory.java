@@ -26,6 +26,11 @@ public class DefaultContextComponentFactory<T> implements ContextComponentFactor
         }
     }
 
+    @Override
+    public Class<?>[] argumentClasses() {
+        return argumentClasses;
+    }
+
     void checkTypeMismatch(Object... arguments) {
         if (arguments == null)
             throw new ComponentFactoryException("Arguments array is null");

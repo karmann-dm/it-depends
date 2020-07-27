@@ -16,4 +16,12 @@ public class ComponentInstance<T> {
     public void instantiate() {
         this.instance = contextComponent.componentFactory().create(args);
     }
+
+    public T getInstance() {
+        return instance;
+    }
+
+    public ContextComponent<T> getContextComponent() {
+        return contextComponent;
+    }
 }

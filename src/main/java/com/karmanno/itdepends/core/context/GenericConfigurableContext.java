@@ -1,11 +1,13 @@
 package com.karmanno.itdepends.core.context;
 
+import com.karmanno.itdepends.core.component.ComponentInstance;
 import com.karmanno.itdepends.core.component.ContextComponent;
 
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class GenericConfigurableContext implements ConfigurableContext {
+
     private ContextConfiguration contextConfiguration = new GenericContextConfiguration();
 
     @Override
@@ -14,9 +16,9 @@ public class GenericConfigurableContext implements ConfigurableContext {
     }
 
     @Override
-    public ContextConfiguration configure(ConfigurationBuilder builder) {
+    public GenericConfigurableContext configure(ConfigurationBuilder builder) {
         contextConfiguration = builder.build();
-        return contextConfiguration;
+        return this;
     }
 
     @Override
@@ -36,6 +38,16 @@ public class GenericConfigurableContext implements ConfigurableContext {
     @Override
     public <T> Stream<ContextComponent<T>> getComponentsByClass(Class<T> cls) {
         return null;
+    }
+
+    @Override
+    public <T> Optional<T> getInstanceByClass(Class<T> cls) {
+        return (Optional<T>) contextConfiguration.getInstances()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().getContextComponent().componentClass().equals(cls))
+                .map(entry -> entry.getValue().getInstance())
+                .findFirst();
     }
 
     @Override

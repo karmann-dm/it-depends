@@ -25,6 +25,7 @@ public class PackageComponentScanner implements ComponentScanner {
             Class<?>[] classes = getClasses(basePackage);
             for (Class<?> cls : classes) {
                 if (cls.isAnnotationPresent(ContextScoped.class)) {
+                    var annotation = cls.getAnnotation(ContextScoped.class);
                     var component = new DefaultContextComponentBuilder(cls);
                     var constructors = Arrays.asList(cls.getConstructors());
                     Constructor<?> constructor = null;
@@ -61,6 +62,9 @@ public class PackageComponentScanner implements ComponentScanner {
                     for (Class<?> type : types) {
                         component.arg(type);
                     }
+                    component.scope(annotation.scope());
+                    component.instantiationPolicy(annotation.instantiationPolicy());
+
                     result.add(component.build());
                 }
             }

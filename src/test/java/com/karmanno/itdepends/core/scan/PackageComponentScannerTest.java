@@ -1,9 +1,11 @@
 package com.karmanno.itdepends.core.scan;
 
-import com.karmanno.itdepends.core.component.DefaultContextComponent;
+import com.karmanno.itdepends.core.component.*;
 import com.karmanno.itdepends.core.examples.annotated_correct_examples.SomeClass;
-import com.karmanno.itdepends.core.component.ContextComponent;
-import com.karmanno.itdepends.core.component.DefaultContextComponentFactory;
+import com.karmanno.itdepends.core.examples.annotation_policy.DefaultPolicyClass;
+import com.karmanno.itdepends.core.examples.annotation_policy.PolicyClass;
+import com.karmanno.itdepends.core.examples.annotation_scope.DefaultScopedClass;
+import com.karmanno.itdepends.core.examples.annotation_scope.ScopedClass;
 import com.karmanno.itdepends.core.examples.multiple_correct_examples.SomeFirstClass;
 import com.karmanno.itdepends.core.examples.multiple_correct_examples.SomeSecondClass;
 import com.karmanno.itdepends.core.examples.multiple_correct_examples.SomeThirdClass;
@@ -91,9 +93,65 @@ public class PackageComponentScannerTest {
         assertEquals(InputStream.class, ((DefaultContextComponentFactory<?>)list.get(0).componentFactory()).getArgumentClasses()[0]);
     }
 
+    @Test
+    public void shouldGetDefaultScope() {
+        // given:
+        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.examples.annotation_scope");
+
+        // when:
+        var components = packageComponentScanner.scanForComponents();
+        var component = getComponent(components, DefaultScopedClass.class);
+
+        assertEquals(Scope.SINGLETON, component.scope());
+    }
+
+    @Test
+    public void shouldGetExplicitScope() {
+        // given:
+        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.examples.annotation_scope");
+
+        // when:
+        var components = packageComponentScanner.scanForComponents();
+        var component = getComponent(components, ScopedClass.class);
+
+        // then:
+        assertEquals(Scope.PROTOTYPE, component.scope());
+    }
+
+    @Test
+    public void shouldGetDefaultInstantiationPolicy() {
+        // given:
+        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.examples.annotation_policy");
+
+        // when:
+        var components = packageComponentScanner.scanForComponents();
+        var component = getComponent(components, DefaultPolicyClass.class);
+
+        assertEquals(InstantiationPolicy.INSTANT, component.instantiationPolicy());
+    }
+
+    @Test
+    public void shouldGetExplicitInstantiationPolicy() {
+        // given:
+        PackageComponentScanner packageComponentScanner = new PackageComponentScanner("com.karmanno.itdepends.core.examples.annotation_policy");
+
+        // when:
+        var components = packageComponentScanner.scanForComponents();
+        var component = getComponent(components, PolicyClass.class);
+
+        assertEquals(InstantiationPolicy.LAZY, component.instantiationPolicy());
+    }
+
     private boolean componentExists(Collection<ContextComponent<?>> components, Class<?> aClass) {
         return components.stream()
                 .filter(component -> component.componentClass().equals(aClass))
                 .count() == 1;
+    }
+
+    private ContextComponent<?> getComponent(Collection<ContextComponent<?>> components, Class<?> aClass) {
+        return components.stream()
+                .filter(component -> component.componentClass().equals(aClass))
+                .findFirst()
+                .orElseThrow();
     }
 }

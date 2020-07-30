@@ -25,8 +25,10 @@ public class PackageComponentScanner implements ComponentScanner {
             Class<?>[] classes = getClasses(basePackage);
             for (Class<?> cls : classes) {
                 if (cls.isAnnotationPresent(ContextScoped.class)) {
+                    var uuid = UUID.randomUUID().toString();
+
                     var annotation = cls.getAnnotation(ContextScoped.class);
-                    var component = new DefaultContextComponentBuilder(cls);
+                    var component = new DefaultContextComponentBuilder(uuid, cls);
                     var constructors = Arrays.asList(cls.getConstructors());
                     Constructor<?> constructor = null;
 

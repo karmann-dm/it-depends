@@ -11,6 +11,7 @@ public class DefaultContextComponentTest {
     public void shouldSaveComponentFieldsByPackagePrivateConstructor() {
         // when
         ContextComponent<BigDecimal> contextComponent = new DefaultContextComponent<>(
+                "someId",
                 BigDecimal.class,
                 Scope.PROTOTYPE,
                 new DefaultContextComponentFactory<>(BigDecimal.class),
@@ -27,6 +28,7 @@ public class DefaultContextComponentTest {
     public void shouldFailOnNullFields() {
         // when
         ContextComponent<Void> contextComponent = new DefaultContextComponent<>(
+                null,
                 null,
                 null,
                 null,

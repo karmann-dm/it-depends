@@ -12,7 +12,7 @@ public class DefaultContextComponentBuilderTest {
     @Test
     public void shouldCreateComponent() {
         // when:
-        var component = new DefaultContextComponentBuilder<>(BigDecimal.class)
+        var component = new DefaultContextComponentBuilder<>("someId", BigDecimal.class)
                 .arg(BigInteger.class)
                 .arg(MathContext.class)
                 .scope(Scope.PROTOTYPE)
@@ -34,7 +34,7 @@ public class DefaultContextComponentBuilderTest {
     @Test
     public void shouldSubstituteScopeByDefault() {
         // when:
-        var component = new DefaultContextComponentBuilder<>(BigDecimal.class)
+        var component = new DefaultContextComponentBuilder<>("someId", BigDecimal.class)
                 .arg(BigInteger.class)
                 .arg(MathContext.class)
                 .factory(new DefaultContextComponentFactory<>(BigDecimal.class, BigInteger.class, MathContext.class))
@@ -47,7 +47,7 @@ public class DefaultContextComponentBuilderTest {
     @Test
     public void shouldSubstituteComponentFactory() {
         // when:
-        var component = new DefaultContextComponentBuilder<>(BigDecimal.class)
+        var component = new DefaultContextComponentBuilder<>("someId", BigDecimal.class)
                 .arg(BigInteger.class)
                 .arg(MathContext.class)
                 .build();
@@ -59,7 +59,7 @@ public class DefaultContextComponentBuilderTest {
     @Test
     public void shouldSubstituteInstantiationPolicyByDefault() {
         // when:
-        var component = new DefaultContextComponentBuilder<>(BigDecimal.class)
+        var component = new DefaultContextComponentBuilder<>("someId", BigDecimal.class)
                 .arg(BigInteger.class)
                 .arg(MathContext.class)
                 .build();
@@ -71,7 +71,16 @@ public class DefaultContextComponentBuilderTest {
     @Test(expected = AssertionError.class)
     public void shouldFailOnNullComponentClass() {
         // when:
-        var component = new DefaultContextComponentBuilder<>(null)
+        var component = new DefaultContextComponentBuilder<>("someId", null)
+                .arg(BigInteger.class)
+                .arg(MathContext.class)
+                .build();
+    }
+
+    @Test(expected = AssertionError.class)
+    public void shouldFailOnNullId() {
+        // when:
+        var component = new DefaultContextComponentBuilder<>(null, BigDecimal.class)
                 .arg(BigInteger.class)
                 .arg(MathContext.class)
                 .build();

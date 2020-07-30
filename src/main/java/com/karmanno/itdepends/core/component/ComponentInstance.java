@@ -18,6 +18,9 @@ public class ComponentInstance<T> {
     }
 
     public T getInstance() {
+        if (contextComponent.instantiationPolicy().equals(InstantiationPolicy.LAZY) && instance == null) {
+            instantiate();
+        }
         return instance;
     }
 

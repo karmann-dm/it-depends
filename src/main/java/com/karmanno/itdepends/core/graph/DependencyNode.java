@@ -1,12 +1,21 @@
 package com.karmanno.itdepends.core.graph;
 
+import com.karmanno.itdepends.core.component.ComponentInstance;
+import com.karmanno.itdepends.core.component.ContextComponent;
+
 import java.util.Objects;
 
 public class DependencyNode {
     private String id;
     private Class<?> cls;
+    private final ContextComponent<?> contextComponent;
+    private ComponentInstance<?> componentInstance;
+    private boolean visited = false;
 
-    public DependencyNode(String id, Class<?> cls) {
+    public DependencyNode(String id, Class<?> cls, ContextComponent<?> contextComponent) {
+        this.id = id;
+        this.cls = cls;
+        this.contextComponent = contextComponent;
     }
 
     public void setCls(Class<?> cls) {
@@ -17,6 +26,10 @@ public class DependencyNode {
         this.id = id;
     }
 
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
     public Class<?> getCls() {
         return cls;
     }
@@ -25,16 +38,19 @@ public class DependencyNode {
         return id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DependencyNode that = (DependencyNode) o;
-        return id.equals(that.id);
+    public boolean isVisited() {
+        return visited;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public ContextComponent<?> getContextComponent() {
+        return contextComponent;
+    }
+
+    public ComponentInstance<?> getComponentInstance() {
+        return componentInstance;
+    }
+
+    public void setComponentInstance(ComponentInstance<?> componentInstance) {
+        this.componentInstance = componentInstance;
     }
 }

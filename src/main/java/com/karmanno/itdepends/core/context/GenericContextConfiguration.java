@@ -17,7 +17,7 @@ public class GenericContextConfiguration implements ContextConfiguration {
     // TODO: resolve conflicts
     @Override
     public ContextComponent<?> registerComponent(ContextComponent<?> contextComponent) {
-        components.put(contextComponent.getClass().getCanonicalName(), contextComponent);
+        components.put(contextComponent.id(), contextComponent);
         return contextComponent;
     }
 

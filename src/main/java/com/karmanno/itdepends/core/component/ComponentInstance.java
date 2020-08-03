@@ -16,4 +16,15 @@ public class ComponentInstance<T> {
     public void instantiate() {
         this.instance = contextComponent.componentFactory().create(args);
     }
+
+    public T getInstance() {
+        if (contextComponent.instantiationPolicy().equals(InstantiationPolicy.LAZY) && instance == null) {
+            instantiate();
+        }
+        return instance;
+    }
+
+    public ContextComponent<T> getContextComponent() {
+        return contextComponent;
+    }
 }

@@ -24,43 +24,51 @@ public class PackageComponentScanner implements ComponentScanner {
         try {
             Class<?>[] classes = getClasses(basePackage);
             for (Class<?> cls : classes) {
-                var component = new DefaultContextComponentBuilder(cls);
-                var constructors = Arrays.asList(cls.getConstructors());
-                Constructor<?> constructor = null;
+                if (cls.isAnnotationPresent(ContextScoped.class)) {
+                    var uuid = UUID.randomUUID().toString();
 
-                if (constructors.size() == 1) {
-                    constructor = constructors.get(0);
-                } else {
-                    var annotatedConstructors = constructors.stream()
-                            .filter(c -> c.isAnnotationPresent(ContextTarget.class))
-                            .collect(Collectors.toList());
-                    if (annotatedConstructors.size() == 0) {
-                        var nonEmptyConstructors = constructors.stream()
-                                .filter(c -> c.getParameterCount() > 0)
-                                .collect(Collectors.toList());
-                        if (nonEmptyConstructors.size() == 1) {
-                            constructor = nonEmptyConstructors.get(0);
-                        } else if (nonEmptyConstructors.size() > 1) {
-                            throw new ComponentScanException("Impossible to choose constructor for injection. There is more than 1 non-empty constructor");
-                        } else {
-                            constructor = constructors
-                                    .stream()
-                                    .filter(c -> c.getParameterCount() == 0)
-                                    .findFirst()
-                                    .orElseThrow(() -> new ComponentScanException("No constructors present"));
-                        }
-                    } else if (annotatedConstructors.size() > 1) {
-                        throw new ComponentScanException("Impossible to choose constructor for injection. There is more than 1 constructor with ContextTarget annotation");
+                    var annotation = cls.getAnnotation(ContextScoped.class);
+                    var component = new DefaultContextComponentBuilder(uuid, cls);
+                    var constructors = Arrays.asList(cls.getConstructors());
+                    Constructor<?> constructor = null;
+
+                    if (constructors.size() == 1) {
+                        constructor = constructors.get(0);
                     } else {
-                        constructor = annotatedConstructors.get(0);
+                        var annotatedConstructors = constructors.stream()
+                                .filter(c -> c.isAnnotationPresent(ContextTarget.class))
+                                .collect(Collectors.toList());
+                        if (annotatedConstructors.size() == 0) {
+                            var nonEmptyConstructors = constructors.stream()
+                                    .filter(c -> c.getParameterCount() > 0)
+                                    .collect(Collectors.toList());
+                            if (nonEmptyConstructors.size() == 1) {
+                                constructor = nonEmptyConstructors.get(0);
+                            } else if (nonEmptyConstructors.size() > 1) {
+                                throw new ComponentScanException("Impossible to choose constructor for injection. There is more than 1 non-empty constructor");
+                            } else {
+                                constructor = constructors
+                                        .stream()
+                                        .filter(c -> c.getParameterCount() == 0)
+                                        .findFirst()
+                                        .orElseThrow(() -> new ComponentScanException("No constructors present"));
+                            }
+                        } else if (annotatedConstructors.size() > 1) {
+                            throw new ComponentScanException("Impossible to choose constructor for injection. There is more than 1 constructor with ContextTarget annotation");
+                        } else {
+                            constructor = annotatedConstructors.get(0);
+                        }
                     }
-                }
 
-                var types = constructor.getParameterTypes();
-                for (Class<?> type : types) {
-                    component.arg(type);
+                    var types = constructor.getParameterTypes();
+                    for (Class<?> type : types) {
+                        component.arg(type);
+                    }
+                    component.scope(annotation.scope());
+                    component.instantiationPolicy(annotation.instantiationPolicy());
+
+                    result.add(component.build());
                 }
-                result.add(component.build());
             }
         } catch (Exception e) {
             throw new ComponentScanException("Could not scan package " + basePackage, e);

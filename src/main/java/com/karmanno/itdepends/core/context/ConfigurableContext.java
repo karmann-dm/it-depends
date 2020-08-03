@@ -18,7 +18,7 @@ public interface ConfigurableContext {
      * @param builder
      * @return
      */
-    ContextConfiguration configure(ConfigurationBuilder builder);
+    GenericConfigurableContext configure(ConfigurationBuilder builder);
 
     /**
      *
@@ -42,6 +42,9 @@ public interface ConfigurableContext {
      * @return
      */
     <T> Stream<ContextComponent<T>> getComponentsByClass(Class<T> cls);
+
+
+    <T> Optional<T> getInstanceByClass(Class<T> cls);
 
     /**
      * Main method for the start of context-resolving process

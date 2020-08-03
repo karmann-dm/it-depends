@@ -18,12 +18,21 @@ public class DefaultContextComponentFactory<T> implements ContextComponentFactor
         checkTypeMismatch(arguments);
 
         try {
-            Constructor<T> componentConstructor = componentClass.getConstructor(argumentClasses);
+            Constructor<T> componentConstructor;
+            if (argumentClasses.length == 0)
+                componentConstructor = componentClass.getDeclaredConstructor();
+            else
+                componentConstructor = componentClass.getDeclaredConstructor(argumentClasses);
             componentConstructor.setAccessible(true);
             return componentConstructor.newInstance(arguments);
         } catch (Exception e) {
             throw new ComponentFactoryException("Could not instantiate component", e);
         }
+    }
+
+    @Override
+    public Class<?>[] argumentClasses() {
+        return argumentClasses;
     }
 
     void checkTypeMismatch(Object... arguments) {

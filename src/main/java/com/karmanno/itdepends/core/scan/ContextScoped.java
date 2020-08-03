@@ -1,5 +1,6 @@
 package com.karmanno.itdepends.core.scan;
 
+import com.karmanno.itdepends.core.component.InstantiationPolicy;
 import com.karmanno.itdepends.core.component.Scope;
 
 import java.lang.annotation.ElementType;
@@ -10,6 +11,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ContextScoped {
-    Scope scope();
-    String module() default "main";
+    Scope scope() default Scope.SINGLETON;
+    InstantiationPolicy instantiationPolicy() default InstantiationPolicy.INSTANT;
 }

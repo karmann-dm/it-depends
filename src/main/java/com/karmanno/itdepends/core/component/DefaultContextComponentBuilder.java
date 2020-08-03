@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultContextComponentBuilder<T> implements ContextComponentBuilder<T> {
+    private final String id;
     private final Class<T> componentClass;
     private final List<Class<?>> argumentClasses = new ArrayList<>();
     private Scope scope;
     private ContextComponentFactory<T> contextComponentFactory;
     private InstantiationPolicy instantiationPolicy;
 
-    public DefaultContextComponentBuilder(Class<T> componentClass) {
+    public DefaultContextComponentBuilder(String id, Class<T> componentClass) {
+        this.id = id;
         this.componentClass = componentClass;
     }
 
@@ -37,6 +39,7 @@ public class DefaultContextComponentBuilder<T> implements ContextComponentBuilde
     @Override
     public DefaultContextComponent<T> build() {
         return new DefaultContextComponent<>(
+                id,
                 componentClass,
                 scope == null ? Scope.SINGLETON : scope,
                 contextComponentFactory == null

@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "com.karmanno.plugins.semver" version "1.15"
 }
 
 group 'org.example'
@@ -11,4 +12,9 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
 }

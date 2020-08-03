@@ -68,11 +68,25 @@ public class GenericConfigurableContext implements ConfigurableContext {
                             });
                         }
 
+                        Object[] adjustedArgs = adjustArgumentsOrder(localArgs, v.getContextComponent().componentFactory().argumentClasses());
+
                         if (v.getComponentInstance() == null) {
-                            v.setComponentInstance(new ComponentInstance<>(v.getContextComponent(), localArgs.toArray(new Object[0])));
+                            var instance = new ComponentInstance<>(v.getContextComponent(), adjustedArgs);
+                            v.setComponentInstance(instance);
+                            contextConfiguration.getInstances().put(instance.getContextComponent().id(), instance);
                         }
                         arguments.add(v.getComponentInstance().getInstance());
                     });
                 });
+    }
+
+    private Object[] adjustArgumentsOrder(List<Object> args, Class<?>[] argumentClasses) {
+        List<Object> result = new ArrayList<>();
+        for (Class<?> argumentClass : argumentClasses) {
+            var arg = args.stream().filter(a -> argumentClass.isAssignableFrom(a.getClass()))
+                    .findFirst().orElse(null);
+            result.add(arg);
+        }
+        return result.toArray();
     }
 }

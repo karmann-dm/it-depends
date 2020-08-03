@@ -30,7 +30,7 @@ public class DependencyGraph {
 
     public List<DependencyNode> search(Class<?> cls) {
         return vertexes.values().stream()
-                .filter(v -> cls.isAssignableFrom(cls))
+                .filter(v -> cls.isAssignableFrom(v.getCls()))
                 .collect(Collectors.toList());
     }
 

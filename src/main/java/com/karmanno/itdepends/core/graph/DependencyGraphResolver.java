@@ -20,11 +20,9 @@ public class DependencyGraphResolver {
                 List<DependencyNode> candidates = dependencyGraph.search(dependency);
                 if (candidates.size() == 0)
                     throw new DependencyResolveException("No candidates for the dependency");
-
-                if (candidates.size() == 1)  { // no alternatives
-                    var node = candidates.get(0);
-                    dependencyGraph.insertConnection(contextComponent.id(), node.getId());
-                }
+                candidates.forEach(candidate -> {
+                    dependencyGraph.insertConnection(contextComponent.id(), candidate.getId());
+                });
             }
         });
         return dependencyGraph;

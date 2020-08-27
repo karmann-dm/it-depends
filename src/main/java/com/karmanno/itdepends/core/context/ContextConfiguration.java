@@ -2,7 +2,7 @@ package com.karmanno.itdepends.core.context;
 
 import com.karmanno.itdepends.core.component.ComponentInstance;
 import com.karmanno.itdepends.core.component.ContextComponent;
-import com.karmanno.itdepends.core.property.PropertySource;
+import com.karmanno.itdepends.core.property.PropertySourceComponent;
 
 import java.util.Collection;
 import java.util.Map;
@@ -10,9 +10,7 @@ import java.util.Map;
 public interface ContextConfiguration {
     ContextComponent<?> registerComponent(ContextComponent<?> contextComponent);
 
-    Collection<PropertySource> getPropertySources();
-
-    void registerPropertySource(PropertySource propertySource);
+    void registerPropertySource(String path);
 
     Map<String, ContextComponent<?>> getComponents();
 

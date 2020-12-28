@@ -9,8 +9,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Enumeration;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -34,7 +35,7 @@ public class ClassPathScanner implements Scanner {
     private Stream<Class<?>> findClasses() {
         var cl = Thread.currentThread().getContextClassLoader();
         var path = packageName.replace(".", "/");
-        Enumeration<URL> resources = null;
+        Enumeration<URL> resources;
         try {
             resources = cl.getResources(path);
         } catch (IOException e) {

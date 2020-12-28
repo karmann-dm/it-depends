@@ -1,4 +1,4 @@
-package com.karmanno.itdepends.core.component;
+package com.karmanno.itdepends.core;
 
 public enum Scope {
     SINGLETON,

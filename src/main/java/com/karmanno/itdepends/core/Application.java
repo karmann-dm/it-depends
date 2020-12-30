@@ -1,5 +1,7 @@
 package com.karmanno.itdepends.core;
 
+import com.karmanno.itdepends.core.scanner.Scanner;
+
 import java.lang.annotation.*;
 
 @Documented

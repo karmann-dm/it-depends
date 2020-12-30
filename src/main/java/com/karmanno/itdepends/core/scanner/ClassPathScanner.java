@@ -1,8 +1,13 @@
-package com.karmanno.itdepends.core;
+package com.karmanno.itdepends.core.scanner;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.karmanno.itdepends.core.ComponentCandidate;
+import com.karmanno.itdepends.core.ContextComponent;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -16,9 +21,13 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class ClassPathScanner implements Scanner {
+    private static final Logger logger = LoggerFactory.getLogger(ClassPathScanner.class);
     private final String packageName;
 
-    public ClassPathScanner(@Nonnull String packageName) {
+    public ClassPathScanner(String packageName) {
+        if (packageName == null) {
+            throw ClassPathScannerException.packageIsNull();
+        }
         this.packageName = packageName;
     }
 
@@ -28,17 +37,23 @@ public class ClassPathScanner implements Scanner {
                 .map(this::createCandidate);
     }
 
-    private ComponentCandidate<?> createCandidate(Class<?> componentCandidateClass) {
+    @VisibleForTesting
+    ComponentCandidate<?> createCandidate(Class<?> componentCandidateClass) {
+        if (componentCandidateClass == null) {
+            throw CandidateCreationException.componentCandidateClassIsNull();
+        }
         return new ComponentCandidate<>(componentCandidateClass);
     }
 
-    private Stream<Class<?>> findClasses() {
+    @VisibleForTesting
+    Stream<Class<?>> findClasses() {
         var cl = Thread.currentThread().getContextClassLoader();
         var path = packageName.replace(".", "/");
         Enumeration<URL> resources;
         try {
             resources = cl.getResources(path);
         } catch (IOException e) {
+            logger.debug("Could not get resources with ClassLoader from path {}", path, e);
             return Stream.empty();
         }
 
@@ -52,30 +67,37 @@ public class ClassPathScanner implements Scanner {
          .filter(cls -> cls.isAnnotationPresent(ContextComponent.class));
     }
 
-    private Stream<Path> extractPath(URL url) {
+    Stream<Path> extractPath(URL url) {
         try {
             return Stream.of(Paths.get(url.toURI()));
         } catch (URISyntaxException e) {
+            logger.debug("Could not extract path from URL {}", url.toString(), e);
             return Stream.empty();
         }
     }
 
-    private Stream<Class<?>> extractClasses(Path path) {
+    Stream<Class<?>> extractClasses(Path path) {
         try {
             return findClasses(path);
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (IOException e) {
+            logger.debug("Could not extract classes from path {}", path.toString(), e);
             return Stream.empty();
         }
     }
 
-    private Stream<Class<?>> findClasses(Path directory) throws ClassNotFoundException, IOException {
+    Stream<Class<?>> findClasses(Path directory) throws IOException {
         return Files.walk(directory)
                 .filter(Files::exists)
                 .flatMap(path -> {
                     if (isClass(path)) {
+                        var packagePath = FilenameUtils.getBaseName(
+                                StringUtils.difference(directory.toString(), path.toString()).replace("/", ".")
+                        );
+                        var className = packageName + packagePath;
                         try {
-                            return Stream.of(Class.forName(packageName + "." + FilenameUtils.getBaseName(path.getFileName().toString())));
+                            return Stream.of(Class.forName(className));
                         } catch (ClassNotFoundException e) {
+                            logger.debug("Could not determine class for name {}", className, e);
                             return Stream.empty();
                         }
                     } else {
@@ -84,7 +106,7 @@ public class ClassPathScanner implements Scanner {
                 });
     }
 
-    private boolean isClass(Path path) {
+    boolean isClass(Path path) {
         return FilenameUtils.getExtension(path.getFileName().toString()).equalsIgnoreCase("class");
     }
 }

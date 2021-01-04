@@ -1,11 +1,19 @@
 package com.karmanno.itdepends.core;
 
+import com.karmanno.itdepends.core.context.DependencyTree;
+
 import java.util.stream.Stream;
 
 /**
  * Common interface which is representing a DI container
  */
 public interface Context {
+    /**
+     * Returns dependency tree for specified context
+     * @return {@link DependencyTree}
+     */
+    DependencyTree getDependencyTree();
+
     /**
      * Pulls component instances in lazy stream for the specified class
      * @param componentClass Class, provided as desirable component instance type

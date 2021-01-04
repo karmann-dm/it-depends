@@ -14,7 +14,7 @@ public class DefaultCandidateFactoryTest {
         // given:
         var candidate = new ComponentCandidate<>(SomeClass.class);
         var candidateFactory = new DefaultCandidateFactory<>(
-                candidate.getCandidateClass(),
+                candidate,
                 List.of(
                         String.class,
                         List.class,

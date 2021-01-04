@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -15,12 +16,15 @@ public class ComponentCandidate<T> {
     private final Class<T> candidateClass;
     private final Constructor<T> candidateConstructor;
     private final int dependencyFactor;
+    private final String reference;
     private CandidateFactory<T> factory;
+    private boolean resolved = false;
 
     public ComponentCandidate(@Nonnull Class<T> cls) {
         this.candidateClass = cls;
         candidateConstructor = findConstructor();
         dependencyFactor = candidateConstructor.getParameterCount();
+        reference = UUID.randomUUID().toString();
     }
 
     private Constructor<T> findConstructor() {
@@ -72,5 +76,17 @@ public class ComponentCandidate<T> {
     @Override
     public int hashCode() {
         return Objects.hash(candidateClass);
+    }
+
+    public void resolve() {
+        this.resolved = true;
+    }
+
+    public boolean isResolved() {
+        return resolved;
+    }
+
+    public String getReference() {
+        return reference;
     }
 }

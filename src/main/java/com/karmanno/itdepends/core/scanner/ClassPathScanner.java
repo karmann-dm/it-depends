@@ -1,7 +1,7 @@
 package com.karmanno.itdepends.core.scanner;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.karmanno.itdepends.core.ComponentCandidate;
+import com.karmanno.itdepends.core.candidate.ComponentCandidate;
 import com.karmanno.itdepends.core.ContextComponent;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;

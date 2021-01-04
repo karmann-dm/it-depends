@@ -1,6 +1,6 @@
 package com.karmanno.itdepends.core.scanner;
 
-import com.karmanno.itdepends.core.ComponentCandidate;
+import com.karmanno.itdepends.core.candidate.ComponentCandidate;
 
 import java.util.stream.Stream;
 
